@@ -1,23 +1,21 @@
 
-import {BasePage} from "./basePage";
 import {Locator, Page} from "@playwright/test";
+import {ButtonControl} from "@pages/controls/buttonControl";
+import {BasePage} from "./basePage";
+
 export class LoginPage extends BasePage {
-    logInButtonLoc: Locator;
-    logInInputLoc: Locator;
-    passwordInputLoc: Locator;
+    logInBtnControl: ButtonControl;
+    private readonly logInInputLoc: Locator;
+    private readonly passwordInputLoc: Locator;
 
     constructor(page: Page) {
         super(page);
         this.logInInputLoc = this.page.locator("input[name = 'username']");
-        this.passwordInputLoc = this.page.locator("input[name='password']");
-        this.logInButtonLoc = this.page.getByRole('button', { name: 'Увійти' });
+        this.passwordInputLoc = this.page.locator("input[name = 'password']");
+        this.logInBtnControl = new ButtonControl(this.page, this.page.getByRole('button', { name: 'Увійти' }));
     }
 
-    async clickLogInButton(): Promise<void> {
-        await this.logInButtonLoc.click();
-    }
-
-    async fillLogInButton(username: string): Promise<void> {
+    async fillLogIn(username: string): Promise<void> {
         await this.logInInputLoc.fill(username)
     }
 

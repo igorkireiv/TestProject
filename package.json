@@ -4,12 +4,17 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "report": "npx playwright show-report",
+    "test:headless": "npx playwright test --headed"
   },
   "devDependencies": {
-    "@playwright/test": "^1.50.1",
-    "@types/node": "^22.13.4",
-    "typescript": "^5.5.3"
+    "@playwright/test": "1.51.1",
+    "@types/node": "22.13.4",
+    "typescript": "5.5.3"
   },
+
   "private": true
 }
