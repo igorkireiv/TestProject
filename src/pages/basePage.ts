@@ -1,5 +1,4 @@
 import {Page} from "@playwright/test";
-import {HeaderMenuControl} from "@pages/controls/headerMenuControl";
 
 export class BasePage {
     protected readonly page: Page;
