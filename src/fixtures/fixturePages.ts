@@ -4,19 +4,19 @@ import {LoginPage} from "@pages/loginPage";
 import {BasePage} from "@pages/basePage";
 
 type Pages = {
+    basePage: BasePage;
     homePage: HomePage;
     loginPage: LoginPage;
-    basePage: BasePage;
 };
 
 const test = base.extend<Pages>({
-    homePage: async ({page}, use) => {
-        const homePage = new HomePage(page);
-        await use(homePage);
-    },
     basePage: async ({page}, use) => {
         const basePage = new BasePage(page);
         await use(basePage);
+    },
+    homePage: async ({page}, use) => {
+        const homePage = new HomePage(page);
+        await use(homePage);
     },
     loginPage: async ({page}, use) => {
         const loginPage = new LoginPage(page);

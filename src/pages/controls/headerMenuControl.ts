@@ -12,7 +12,7 @@ export class HeaderMenuControl extends WebElement {
     constructor(page: Page) {
         super(page);
         this.logInBtnControl = new ButtonControl(this.page, this.page.getByRole('button', {name: 'Вхід'}));
-        this.userMenuIcon = new ButtonControl(this.page, 'button img[alt="avatar"]');
+        this.userMenuIcon = new ButtonControl(this.page, this.page.locator('button img[alt="avatar"]').first());
         this.userMenu = new UserMenuControl(this.page);
     }
 

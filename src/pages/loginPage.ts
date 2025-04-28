@@ -1,7 +1,6 @@
-
 import {Locator, Page} from "@playwright/test";
-import {ButtonControl} from "@pages/controls/buttonControl";
-import {BasePage} from "./basePage";
+import {ButtonControl} from "./controls/buttonControl";
+import {BasePage} from "@pages/basePage";
 
 export class LoginPage extends BasePage {
     logInBtnControl: ButtonControl;

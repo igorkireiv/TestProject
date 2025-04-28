@@ -20,6 +20,14 @@ test.describe('Log In tests', () => {
         await expect.soft(headerMenu.logInBtnControl.button).toBeVisible();
         await expect.soft(headerMenu.userMenuIcon.button).toBeHidden();
     });
+
+    test('Check Username', async ({homePage}) => {
+        await homePage.logIn();
+        const headerMenu = homePage.headerMenu;
+        await headerMenu.userMenuIcon.clickButton();
+        await headerMenu.userMenu.myProfileBtnControl.clickButton();
+
+    });
 });
 
 
