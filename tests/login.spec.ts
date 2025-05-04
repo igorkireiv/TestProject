@@ -12,19 +12,19 @@ test.describe('Log In tests', () => {
         await homePage.logIn();
         const headerMenu = homePage.headerMenu;
         await expect.soft(headerMenu.logInBtnControl.button).toBeHidden();
-        await expect.soft(headerMenu.userMenuIcon.button).toBeVisible();
+        await expect.soft(headerMenu.userIcon.button).toBeVisible();
 
-        await headerMenu.userMenuIcon.clickButton();
-        await headerMenu.userMenu.logOutBtnControl.clickButton();
+        await headerMenu.userIcon.clickButton();
+        await myProfilePage.logOutBtnControl.clickButton();
 
         await expect.soft(headerMenu.logInBtnControl.button).toBeVisible();
-        await expect.soft(headerMenu.userMenuIcon.button).toBeHidden();
+        await expect.soft(headerMenu.userIcon.button).toBeHidden();
     });
 
     test('Check Username', async ({homePage}) => {
         await homePage.logIn();
         const headerMenu = homePage.headerMenu;
-        await headerMenu.userMenuIcon.clickButton();
+        await headerMenu.userIcon.clickButton();
         await headerMenu.userMenu.myProfileBtnControl.clickButton();
 
     });

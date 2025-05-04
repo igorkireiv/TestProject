@@ -1,12 +1,12 @@
 import {test as base, expect} from '@playwright/test';
 import {HomePage} from "@pages/homePage";
-import {LoginPage} from "@pages/loginPage";
 import {BasePage} from "@pages/basePage";
+import {UserPage} from "@pages/userPages/userPage";
 
 type Pages = {
     basePage: BasePage;
     homePage: HomePage;
-    loginPage: LoginPage;
+    userPage: UserPage;
 };
 
 const test = base.extend<Pages>({
@@ -18,9 +18,9 @@ const test = base.extend<Pages>({
         const homePage = new HomePage(page);
         await use(homePage);
     },
-    loginPage: async ({page}, use) => {
-        const loginPage = new LoginPage(page);
-        await use(loginPage);
+    userPage: async ({page}, use) => {
+        const userPage = new UserPage(page);
+        await use(userPage);
     }
 });
 

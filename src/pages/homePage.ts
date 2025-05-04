@@ -12,11 +12,11 @@ export class HomePage extends BasePage {
     }
 
     async logIn(): Promise<void> {
-        const logInPage = await this.headerMenu.openLogInPage();
+        const logInForm = await this.headerMenu.openLogInForm();
         // @ts-ignore
-        await logInPage.fillLogIn(process.env.USER_NAME);
+        await logInForm.fillLogIn(process.env.EMAIL);
         // @ts-ignore
-        await logInPage.fillPassword(process.env.PASSWORD);
-        await logInPage.logInBtnControl.clickButton();
+        await logInForm.fillPassword(process.env.PASSWORD);
+        await logInForm.logInBtnControl.clickButton();
     }
 }

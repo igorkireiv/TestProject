@@ -1,24 +1,21 @@
 import {Page} from "@playwright/test";
 import {WebElement} from "@pages/controls/webElement";
-import {LoginPage} from "@pages/loginPage";
+import {LoginFormControl} from "@pages/controls/loginFormControl";
 import {ButtonControl} from "@pages/controls/buttonControl";
-import {UserMenuControl} from "@pages/controls/userMenuControl";
+
 
 export class HeaderMenuControl extends WebElement {
-    logInBtnControl: ButtonControl;
-    userMenuIcon: ButtonControl;
-    userMenu: UserMenuControl;
+    userIcon: ButtonControl;
 
     constructor(page: Page) {
         super(page);
-        this.logInBtnControl = new ButtonControl(this.page, this.page.getByRole('button', {name: 'Вхід'}));
-        this.userMenuIcon = new ButtonControl(this.page, this.page.locator('button img[alt="avatar"]').first());
-        this.userMenu = new UserMenuControl(this.page);
+        this.userIcon = new ButtonControl(this.page, this.page.locator('a[class*="header-office"]'));
+
     }
 
-    async openLogInPage(): Promise<LoginPage> {
-        await this.logInBtnControl.clickButton();
-        return new LoginPage(this.page);
+    async openLogInForm(): Promise<LoginFormControl> {
+        await this.userIcon.clickButton();
+        return new LoginFormControl(this.page);
     }
 
 }
