@@ -22,6 +22,4 @@ test.describe('Log In tests', () => {
     await expect.soft(headerMenu.userIcon.button).not.toHaveAttribute('class', /\*authorized/);
     await expect.soft(headerMenu.favouriteIcon.button).toBeHidden();
   });
-
-  test('Check Username', async ({ homePage }) => {});
 });
