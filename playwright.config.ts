@@ -6,7 +6,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 
 import * as dotenv from 'dotenv';
-import * as path from "node:path";
+import * as path from 'node:path';
 dotenv.config();
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 /**

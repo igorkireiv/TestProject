@@ -1,11 +1,9 @@
-import {Page} from "@playwright/test";
+import { Page } from '@playwright/test';
 
 export class WebElement {
-    protected readonly page: Page;
+  protected readonly page: Page;
 
-    constructor(page: Page) {
-        this.page = page;
-    }
-
+  constructor(page: Page) {
+    this.page = page;
+  }
 }
-
