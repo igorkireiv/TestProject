@@ -8,13 +8,16 @@
     "test": "npx playwright test",
     "test:ui": "npx playwright test --ui",
     "report": "npx playwright show-report",
-    "test:headless": "npx playwright test --headed"
+    "test:headless": "npx playwright test --headed",
+    "format": "prettier \"src/**/*.{ts,tsx,js,jsx,json,md}\" \"tests/**/*.{ts,tsx,js,jsx,json,md}\" --write"
   },
   "devDependencies": {
     "@playwright/test": "1.51.1",
     "@types/node": "22.13.4",
     "typescript": "5.5.3"
   },
-
+  "dependencies": {
+    "prettier": "3.5.3"
+  },
   "private": true
 }

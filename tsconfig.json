@@ -6,11 +6,13 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
+    "strictNullChecks": false,
     "outDir": "dist",
     "baseUrl": "./src",
     "paths": {
       "@fixtures/*": ["fixtures/*"],
-      "@pages/*": ["pages/*"]
+      "@pages/*": ["pages/*"],
+      "@data/*": ["data/*"]
     }
   },
   "include": ["src", "tests"]
