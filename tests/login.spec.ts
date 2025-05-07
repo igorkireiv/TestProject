@@ -10,7 +10,7 @@ test.describe('Log In tests', () => {
 
   test.only('Log In & Log Out test', async ({ homePage, userPage }) => {
     const headerMenu = homePage.headerMenu;
-    await expect.soft(headerMenu.userIcon.button).toHaveAttribute('class', /\*authorized/);
+    await expect.soft(headerMenu.userIcon.button).toHaveAttribute('class', /authorized/);
     await expect.soft(headerMenu.userIcon.button).toBeVisible();
     await expect.soft(headerMenu.favouriteIcon.button).toBeVisible();
 
@@ -19,7 +19,7 @@ test.describe('Log In tests', () => {
     await expect.soft(actualUserInformation).toEqual(userInfo);
 
     await userPage.logOutBtnControl.clickButton();
-    await expect.soft(headerMenu.userIcon.button).not.toHaveAttribute('class', /\*authorized/);
+    await expect.soft(headerMenu.userIcon.button).not.toHaveAttribute('class', /authorized/);
     await expect.soft(headerMenu.favouriteIcon.button).toBeHidden();
   });
 });

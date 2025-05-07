@@ -10,6 +10,6 @@ export class UserPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.contactInfoPage = new ContactInfoPage(this.page);
-    this.logOutBtnControl = new ButtonControl(this.page, this.page.locator('a[href*="logout"]'));
+    this.logOutBtnControl = new ButtonControl(this.page, this.page.locator('a[href*="logout"]').first());
   }
 }

@@ -9,7 +9,7 @@ export class HeaderMenuControl extends WebElement {
 
   constructor(page: Page) {
     super(page);
-    this.userIcon = new ButtonControl(this.page, this.page.locator('a[class*="header-office"]'));
+    this.userIcon = new ButtonControl(this.page, this.page.locator('*[class*="header-office"]'));
     this.favouriteIcon = new ButtonControl(this.page, this.page.locator('a[class="header-favourite"]'));
   }
 

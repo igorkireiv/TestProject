@@ -10,7 +10,7 @@ export class LoginFormControl extends WebElement {
   constructor(page: Page) {
     super(page);
     this.logInInputLoc = this.page.locator('input[name ="user_login"]');
-    this.passwordInputLoc = this.page.locator('input[name ="password"]');
+    this.passwordInputLoc = this.page.locator('input[name ="user_pw"]');
     this.logInBtnControl = new ButtonControl(this.page, this.page.getByRole('button', { name: 'Увійти' }));
   }
 
