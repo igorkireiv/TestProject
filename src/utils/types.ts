@@ -5,3 +5,11 @@ export type UserInfo = {
   birthdate: string;
   phoneNumber: string;
 };
+
+export type CartItem = {
+  title: string;
+  description: string;
+  option: string;
+  quantity: number;
+  price: string;
+};

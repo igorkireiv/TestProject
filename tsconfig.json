@@ -12,7 +12,8 @@
     "paths": {
       "@fixtures/*": ["fixtures/*"],
       "@pages/*": ["pages/*"],
-      "@data/*": ["data/*"]
+      "@data/*": ["data/*"],
+      "@types": ["utils/types.ts"],
     }
   },
   "include": ["src", "tests"]

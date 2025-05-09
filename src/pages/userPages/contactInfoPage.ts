@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 import { BasePage } from '@pages/basePage';
-import { UserInfo } from '../../utils/types';
+import { UserInfo } from '@types';
 
 export class ContactInfoPage extends BasePage {
   private readonly usernameFieldLoc: Locator;
@@ -16,10 +16,6 @@ export class ContactInfoPage extends BasePage {
     this.emailFieldLoc = this.page.locator('[id="email"]');
     this.birthdateFieldLoc = this.page.locator('[id="birthday"]');
     this.phoneNumberFieldLoc = this.page.locator('[id="phone"]');
-  }
-
-  get usernameField() {
-    return this.usernameFieldLoc;
   }
 
   async getUserInfo(): Promise<UserInfo> {

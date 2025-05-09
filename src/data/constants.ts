@@ -1,4 +1,4 @@
-import { UserInfo } from '../utils/types';
+import { UserInfo } from '@types';
 
 export const userInfo: UserInfo = {
   username: process.env.USER_NAME,
