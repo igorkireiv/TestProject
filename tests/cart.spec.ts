@@ -19,10 +19,9 @@ test.describe('Cart e2e flow', () => {
     await expect.soft(headerMenu.cartIcon.button).toHaveAttribute('class', /empty/);
   });
 
-  test.only('Cart functionality test', async ({ homePage, categoryPage }) => {
-    let itemsNumber = 0;
-
+  test.only('Cart functionality test', async ({ categoryPage }) => {
     let totalItemsQuantity: number = 0;
+
     for (const category of categories) {
       await headerMenu.openCategoryByName(category);
       const firstItem = await categoryPage.getItemByIndex(0);
