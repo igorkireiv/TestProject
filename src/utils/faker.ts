@@ -14,20 +14,15 @@ export class Faker {
     };
   }
 
-  static generateFakeProductName(): string {
-    return faker.commerce.productName();
+  static getFakeEmail(): string {
+    return faker.internet.email();
   }
 
-  static generateFakePassword(length = 10): string {
+  static getFakePassword(length = 10): string {
     return faker.internet.password({ length, memorable: true });
   }
 
   static getRandomNumber(min: number, max: number): number {
     return faker.number.int({ min, max });
-  }
-
-  static getRandomFloat(min: number, max: number, decimals = 2): number {
-    const factor = Math.pow(10, decimals);
-    return Math.round(faker.number.float({ min, max }) * factor) / factor;
   }
 }

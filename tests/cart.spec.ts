@@ -4,7 +4,7 @@ import { ProductCategory } from '@data/constants';
 import { HeaderMenuControl } from '@pages/controls/headerMenuControl';
 import { Faker } from '@faker';
 
-test.describe('Cart e2e flow', () => {
+test.describe('Cart functionality', () => {
   test.setTimeout(2 * 60000);
   let headerMenu: HeaderMenuControl;
 
@@ -19,7 +19,7 @@ test.describe('Cart e2e flow', () => {
     await expect.soft(headerMenu.cartIcon.button).toHaveAttribute('class', /empty/);
   });
 
-  test.only('Cart functionality test', async ({ categoryPage }) => {
+  test.only('Test - Add items to cart', async ({ categoryPage }) => {
     let totalItemsQuantity: number = 0;
 
     for (const category of categories) {
@@ -39,11 +39,6 @@ test.describe('Cart e2e flow', () => {
 
       totalItemsQuantity = totalItemsQuantity + itemsQuantity;
       await expect.soft(headerMenu.cartIcon.button).toHaveText(`${totalItemsQuantity}`);
-
-      // if (await headerMenu.cartPopup.popup.isVisible()) {
-      //   await headerMenu.cartPopup.closeBtnControl.clickButton();
-      //   await expect(headerMenu.cartPopup.popup).toBeHidden();
-      // }
     }
 
     await headerMenu.cartIcon.clickButton();

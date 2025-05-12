@@ -17,9 +17,6 @@ export async function waitForPageLoad(page: Page, timeout = 10000, interval = 20
     });
 
     if (allHidden) {
-      await page.waitForLoadState('networkidle', { timeout });
-      await page.waitForLoadState('load', { timeout });
-      await page.waitForLoadState('domcontentloaded', { timeout });
       break;
     }
 
@@ -29,4 +26,8 @@ export async function waitForPageLoad(page: Page, timeout = 10000, interval = 20
 
     await page.waitForTimeout(interval);
   }
+
+  await page.waitForLoadState('domcontentloaded', { timeout });
+  await page.waitForLoadState('load', { timeout });
+  await page.waitForLoadState('networkidle', { timeout });
 }

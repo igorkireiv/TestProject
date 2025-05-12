@@ -1,5 +1,7 @@
 import { UserInfo } from '@types';
 
+export const logInFormTitle = 'Вхід до особистого кабінету';
+
 export const userInfo: UserInfo = {
   username: process.env.USER_NAME,
   surname: process.env.SURNAME,

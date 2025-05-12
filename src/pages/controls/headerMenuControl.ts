@@ -35,6 +35,7 @@ export class HeaderMenuControl extends WebElement {
     if (!(await this.cartIcon.button.getAttribute('class')).includes('empty')) {
       await this.cartIcon.clickButton();
       await this.cartPopup.popup.waitFor({ state: 'visible' });
+
       const deleteButton = this.page.locator('.product__button-remove');
       const deleteButtonCount = await this.page.locator('.product__button-remove').count();
       for (let i = deleteButtonCount - 1; i >= 0; i--) {
