@@ -7,6 +7,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 import * as dotenv from 'dotenv';
 import * as path from 'node:path';
+
 dotenv.config();
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 /**
@@ -19,7 +20,7 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */

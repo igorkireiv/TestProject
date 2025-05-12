@@ -1,48 +1,85 @@
 import { test, expect } from '@fixtures/fixturePages';
+import { CartItem } from '@types';
+import { ProductCategory } from '@data/constants';
+import { HeaderMenuControl } from '@pages/controls/headerMenuControl';
+import { Faker } from '@faker';
 
 test.describe('Cart e2e flow', () => {
-    const categories = ['Парфумерія', 'Макіяж', 'Догляд за шкірою'];
-    const addedProducts: {
-        title: string;
-        price: number;
-        quantity: number;
-    }[] = [];
+  test.setTimeout(2 * 60000);
+  let headerMenu: HeaderMenuControl;
 
-    test('Add & remove items in cart test', async ({ homePage }) => {
-        await homePage.logIn();
-        await homePage.headerMenu.cartIcon.clickButton();
-        await homePage.headerMenu.cartPopup.clearCart();
+  const categories = [ProductCategory.PERFUMERY, ProductCategory.MAKE_UP, ProductCategory.HEALTH_CARE];
+  const addedItemsInfo: CartItem[] = [];
 
-        for (const category of categories) {
-            await homePage.openCategoryByName(category);
+  test.beforeEach(async ({ homePage }) => {
+    await homePage.openHomePage();
+    await homePage.logIn();
+    headerMenu = homePage.headerMenu;
+    await headerMenu.clearCart();
+    await expect.soft(headerMenu.cartIcon.button).toHaveAttribute('class', /empty/);
+  });
 
-            const title = await homePage.getFirstProductTitle();
-            const price = await homePage.getFirstProductPrice();
+  test.only('Cart functionality test', async ({ homePage, categoryPage }) => {
+    let itemsNumber = 0;
 
-            addedProducts.push({ title, price, quantity: 1 });
+    let totalItemsQuantity: number = 0;
+    for (const category of categories) {
+      await headerMenu.openCategoryByName(category);
+      const firstItem = await categoryPage.getItemByIndex(0);
+      const itemsQuantity = Faker.getRandomNumber(1, 4);
 
-            await homePage.addFirstProductToCart();
-        }
+      firstItem.quantity = itemsQuantity;
+      addedItemsInfo.push(await firstItem.getItemInfo());
 
-        await cartPage.open();
+      await firstItem.addToCart();
+      await headerMenu.cartPopup.popup.waitFor({ state: 'visible' });
+      const lastAddedItem = headerMenu.cartPopup.getCartItemByIndex(0);
+      await lastAddedItem.increaseAmount(itemsQuantity);
+      await headerMenu.cartPopup.closeBtnControl.clickButton();
+      await expect(headerMenu.cartPopup.popup).toBeHidden();
 
-        const cartItems = await cartPage.getAllCartItems();
+      totalItemsQuantity = totalItemsQuantity + itemsQuantity;
+      await expect.soft(headerMenu.cartIcon.button).toHaveText(`${totalItemsQuantity}`);
 
-        // Перевірка кількості
-        await expect.soft(cartItems.length).toBe(addedProducts.length);
+      // if (await headerMenu.cartPopup.popup.isVisible()) {
+      //   await headerMenu.cartPopup.closeBtnControl.clickButton();
+      //   await expect(headerMenu.cartPopup.popup).toBeHidden();
+      // }
+    }
 
-        // Перевірка кожного товару
-        for (const expected of addedProducts) {
-            const actual = cartItems.find(item => item.title === expected.title);
-            expect.soft(actual).toBeTruthy();
-            expect.soft(actual?.price).toBe(expected.price);
-            expect.soft(actual?.quantity).toBe(expected.quantity);
-            expect.soft(actual?.total).toBe(expected.price * expected.quantity);
-        }
+    await headerMenu.cartIcon.clickButton();
 
-        // Перевірка загальної суми
-        const expectedTotal = addedProducts.reduce((sum, p) => sum + p.price * p.quantity, 0);
-        const actualTotal = await cartPage.getCartTotalPrice();
-        await expect.soft(actualTotal).toBe(expectedTotal);
-    });
+    const cartItemsInfo = await headerMenu.cartPopup.getAllCartItemsInfo();
+
+    // Check items info
+    await expect(cartItemsInfo).toEqual(addedItemsInfo);
+
+    // Check total price
+    const expectedTotal = addedItemsInfo.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const actualTotal = headerMenu.cartPopup.totalPrice;
+    await expect.soft(actualTotal).toHaveText(expectedTotal.toString());
+  });
+
+  test('Update products number test', async ({ homePage }) => {
+    // await headerMenu.openCategoryByName(ProductCategory.ACCESSORIES_AND_EQUIPMENT);
+    //
+    // const title = await homePage.getFirstProductTitle();
+    // const price = await homePage.getFirstProductPrice();
+    //
+    // await homePage.addFirstProductToCart();
+    //
+    // await cartPage.open();
+    //
+    // await cartPage.setProductQuantity(title, 3);
+    //
+    // const cartItem = await cartPage.getCartItemByTitle(title);
+    //
+    // expect(cartItem).toBeTruthy();
+    // expect(cartItem!.price).toBe(price);
+    // expect(cartItem!.quantity).toBe(3);
+    // expect(cartItem!.total).toBe(price * 3);
+    //
+    // const cartTotal = await cartPage.getCartTotalPrice();
+    // expect(cartTotal).toBe(price * 3);
+  });
 });

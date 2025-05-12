@@ -8,7 +8,7 @@ test.describe('Log In tests', () => {
     await homePage.logIn();
   });
 
-  test.only('Log In & Log Out test', async ({ homePage, userPage }) => {
+  test('Log In & Log Out test', async ({ homePage, userPage }) => {
     const headerMenu = homePage.headerMenu;
     await expect.soft(headerMenu.userIcon.button).toHaveAttribute('class', /authorized/);
     await expect.soft(headerMenu.userIcon.button).toBeVisible();

@@ -7,3 +7,17 @@ export const userInfo: UserInfo = {
   birthdate: process.env.BIRTHDATE,
   phoneNumber: process.env.PHONE,
 };
+
+export enum ProductCategory {
+  PERFUMERY = 'Парфумерія',
+  MAKE_UP = 'Макіяж',
+  FACE = 'Обличчя',
+  HAIR = 'Волосся',
+  BODY = 'Тіло',
+  HEALTH_CARE = "Здоров'я і догляд",
+  ACCESSORIES_AND_EQUIPMENT = 'Аксесуари і техніка',
+  CLOTHING = 'Одяг',
+  MEN = 'Чоловікам',
+  GIFTS = 'Подарунки',
+  BRANDS = 'Бренди',
+}

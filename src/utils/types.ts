@@ -7,9 +7,10 @@ export type UserInfo = {
 };
 
 export type CartItem = {
-  title: string;
+  name: string;
+  image: string;
   description: string;
   option: string;
-  quantity: number;
-  price: string;
+  price: number;
+  quantity?: number;
 };

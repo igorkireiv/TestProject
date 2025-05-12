@@ -15,5 +15,7 @@ export class HomePage extends BasePage {
     await logInForm.fillLogIn(process.env.EMAIL);
     await logInForm.fillPassword(process.env.PASSWORD);
     await logInForm.logInBtnControl.clickButton();
+    await this.page.waitForLoadState('networkidle');
+    await this.headerMenu.favouriteIcon.button.waitFor({ state: 'visible' });
   }
 }

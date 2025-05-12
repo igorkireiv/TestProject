@@ -1,15 +1,9 @@
 import { Locator, Page } from '@playwright/test';
-import { WebElement } from '@pages/controls/webElement';
-import { CartItem } from '@types';
 import { ButtonControl } from '@pages/controls/buttonControl';
+import { ItemBaseControl } from '@pages/controls/ItemBaseControl';
 
-export class CartItemControl extends WebElement {
-  private readonly itemLoc: Locator;
-  private readonly titleLoc: Locator;
-  private readonly descriptionLoc: Locator;
-  private readonly optionLoc: Locator;
+export class CartItemControl extends ItemBaseControl {
   private readonly quantityLoc: Locator;
-  private readonly priceLoc: Locator;
   private readonly plusBtnControl: ButtonControl;
   private readonly minusBtnControl: ButtonControl;
   private readonly deleteBtnControl: ButtonControl;
@@ -17,7 +11,8 @@ export class CartItemControl extends WebElement {
   constructor(page: Page, nameOrId: string | number) {
     super(page);
     this.itemLoc = this.getItemLocator(nameOrId);
-    this.titleLoc = this.itemLoc.locator('.product__header');
+    this.nameLoc = this.itemLoc.locator('.product__header');
+    this.imageLinkLoc = this.itemLoc.locator('.product__image');
     this.descriptionLoc = this.itemLoc.locator('.product__header-desc');
     this.optionLoc = this.itemLoc.locator('.product__header-option');
     this.quantityLoc = this.itemLoc.locator('[name="count[]"]');
@@ -27,6 +22,10 @@ export class CartItemControl extends WebElement {
     this.deleteBtnControl = new ButtonControl(this.page, this.itemLoc.locator('.product__button-remove'));
   }
 
+  async getQuantity(): Promise<number> {
+    return Number.parseInt(await this.quantityLoc.inputValue());
+  }
+
   private getItemLocator(nameOrId: string | number): Locator {
     const itemLoc = this.page.locator('li[class^="product-list__item"]');
     return typeof nameOrId === 'string'
@@ -34,13 +33,9 @@ export class CartItemControl extends WebElement {
       : itemLoc.nth(nameOrId);
   }
 
-  async getItemInfo(): Promise<CartItem> {
-    return {
-      title: await this.titleLoc.innerText(),
-      description: await this.descriptionLoc.innerText(),
-      option: await this.optionLoc.innerText(),
-      quantity: Number.parseInt(await this.quantityLoc.inputValue()),
-      price: await this.priceLoc.innerText(),
-    };
+  async increaseAmount(amount: number) {
+    for (let clickIndex = 1; clickIndex < amount; clickIndex++) {
+      await this.plusBtnControl.clickButton();
+    }
   }
 }

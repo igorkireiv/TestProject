@@ -13,7 +13,10 @@ export class ButtonControl extends WebElement {
     return this.btnLoc;
   }
 
-  async clickButton(): Promise<void> {
+  async clickButton(hover?: boolean): Promise<void> {
+    if (hover) {
+      await this.btnLoc.hover();
+    }
     await this.btnLoc.click();
   }
 }
