@@ -19,7 +19,7 @@ test.describe('Cart functionality', () => {
     await expect.soft(headerMenu.cartIcon.button).toHaveAttribute('class', /empty/);
   });
 
-  test.only('Test - Add items to cart', async ({ categoryPage }) => {
+  test('Test - Add items to cart', async ({ categoryPage }) => {
     let totalItemsQuantity: number = 0;
 
     for (const category of categories) {

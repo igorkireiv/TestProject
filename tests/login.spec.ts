@@ -4,7 +4,7 @@ import { HeaderMenuControl } from '@pages/controls/headerMenuControl';
 import { Faker } from '@faker';
 import { LoginFormControl } from '@pages/controls/loginFormControl';
 
-test.describe.only('Log In functionality', () => {
+test.describe('Log In functionality', () => {
   test.setTimeout(2 * 60000);
   let headerMenu: HeaderMenuControl;
   let logInForm: LoginFormControl;

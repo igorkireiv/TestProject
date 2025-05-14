@@ -23,3 +23,9 @@ export enum ProductCategory {
   GIFTS = 'Подарунки',
   BRANDS = 'Бренди',
 }
+
+export enum Filter {
+  BRAND = 'Бренд',
+  PRODUCT_GROUP = 'Група товару',
+  VOLUME = "Об'єм"
+}

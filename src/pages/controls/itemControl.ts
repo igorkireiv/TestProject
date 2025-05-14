@@ -8,9 +8,9 @@ export class ItemControl extends ItemBaseControl {
 
   constructor(page: Page, itemIndex = 0) {
     super(page);
-    this.itemLoc = this.page.locator('.simple-slider-list__link').nth(itemIndex);
+    this.itemLoc = this.page.locator('.catalog-products .simple-slider-list__link').nth(itemIndex);
     this.nameLoc = this.itemLoc.locator('.simple-slider-list__name');
-    this.descriptionLoc = this.itemLoc.locator('.simple-slider-list__description');
+    this.descriptionLoc = this.itemLoc.locator('.simple-slider-list__description').first();
     this.priceLoc = this.itemLoc.locator('.simple-slider-list__price .price_item');
     this.optionLoc = this.itemLoc.locator('.product-item__volume-item span');
     this.imageLinkLoc = this.itemLoc.locator('.simple-slider-list__image');
