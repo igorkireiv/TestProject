@@ -1,7 +1,7 @@
 import { BasePage } from '@pages/basePage';
 import { Locator, Page } from '@playwright/test';
 import { ItemControl } from '@pages/controls/itemControl';
-import {getRandomItems, waitForPageLoad} from '../utils/helper';
+import { getRandomItems, waitForPageLoad } from '../utils/helper';
 import { CartItem } from '@types';
 
 export class CategoryPage extends BasePage {
@@ -16,13 +16,18 @@ export class CategoryPage extends BasePage {
     return new ItemControl(this.page, index);
   }
 
+  async getItemsNumber(): Promise<number> {
+    return await this.page.locator('.catalog-products .simple-slider-list__link').count();
+  }
+
   async getAllItemsInfo(): Promise<CartItem[]> {
-    const itemsNumber = await this.page.locator('.catalog-products .simple-slider-list__link').count();
+    const itemsNumber = await this.getItemsNumber();
 
     const itemsInfo: CartItem[] = [];
 
     for (let itemIndex = itemsNumber - 1; itemIndex >= 0; itemIndex--) {
       const item = await this.getItemByIndex(itemIndex);
+      await item.waitForItemLoad();
       const itemInfo = await item.getItemInfo();
       itemsInfo.push(itemInfo);
     }
@@ -31,11 +36,10 @@ export class CategoryPage extends BasePage {
   }
 
   async getRandomFilterItems(filterName: string, count: number): Promise<string[]> {
-    const filterBlock = this.filterBlockLoc
-      .filter({ has: this.page.locator(`[data-option-name="${filterName}"]`) });
+    const filterBlock = this.filterBlockLoc.filter({ has: this.page.locator(`[data-option-name="${filterName}"]`) });
 
     const filterItemsLoc = filterBlock.locator('[data-filter-variant-name]').all();
-    const randomFilterItems = getRandomItems(await filterItemsLoc, count)
+    const randomFilterItems = getRandomItems(await filterItemsLoc, count);
 
     const filterItems: string[] = [];
     for (let filterIndex = 0; filterIndex < randomFilterItems.length; filterIndex++) {

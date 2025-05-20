@@ -1,7 +1,7 @@
 import { test, expect } from '@fixtures/fixturePages';
 import { Filter, ProductCategory } from '@data/constants';
 import { HeaderMenuControl } from '@pages/controls/headerMenuControl';
-import { getRandomItems } from '../src/utils/helper';
+import { waitForPageLoad } from '../src/utils/helper';
 
 test.describe('Filters functionality', () => {
   test.setTimeout(2 * 60000);
@@ -13,7 +13,7 @@ test.describe('Filters functionality', () => {
     headerMenu = homePage.headerMenu;
   });
 
-  test.only('Test - Filter by Brand', async ({ categoryPage }) => {
+  test.only('Test - Filter by Brand', async ({ page, categoryPage }) => {
     const productCategory = ProductCategory.PERFUMERY;
     await headerMenu.openCategoryByName(productCategory);
 
@@ -23,17 +23,19 @@ test.describe('Filters functionality', () => {
     for (const brandName of randomBrands) {
       await headerMenu.openCategoryByName(productCategory); // open page to reset last filter
       await categoryPage.applyFilter(brandFilter, brandName);
+      await waitForPageLoad(page);
 
-      const itemsInfo = await categoryPage.getAllItemsInfo();
-      expect(itemsInfo.length).toBeGreaterThan(0);
+      const itemsNumber = await categoryPage.getItemsNumber();
+      expect(itemsNumber).toBeGreaterThan(0);
 
-      for (const item of itemsInfo) {
-        expect.soft(item.name).toContain(brandName.toLowerCase());
+      for (let itemIndex = 0; itemIndex < itemsNumber; itemIndex++) {
+        const item = await categoryPage.getItemByIndex(itemIndex);
+        expect.soft(item.name).toContainText(brandName, { ignoreCase: true });
       }
     }
   });
 
-  test('Test - Filter by Product Group', async ({ categoryPage }) => {
+  test('Test - Filter by Product Group', async ({ page, categoryPage }) => {
     const productCategory = ProductCategory.MAKE_UP;
     await headerMenu.openCategoryByName(productCategory);
 
@@ -43,12 +45,14 @@ test.describe('Filters functionality', () => {
     for (const groupName of randomGroups) {
       await headerMenu.openCategoryByName(productCategory); // open page to reset last filter
       await categoryPage.applyFilter(brandFilter, groupName);
+      await waitForPageLoad(page);
 
-      const itemsInfo = await categoryPage.getAllItemsInfo();
-      expect(itemsInfo.length).toBeGreaterThan(0);
+      const itemsNumber = await categoryPage.getItemsNumber();
+      expect(itemsNumber).toBeGreaterThan(0);
 
-      for (const item of itemsInfo) {
-        expect.soft(item.description).toContain(groupName.toLowerCase());
+      for (let itemIndex = 0; itemIndex < itemsNumber; itemIndex++) {
+        const item = await categoryPage.getItemByIndex(itemIndex);
+        expect.soft(item.description).toContainText(groupName.toLowerCase());
       }
     }
   });

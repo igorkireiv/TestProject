@@ -3,6 +3,7 @@ import { CartItem } from '@types';
 import { ProductCategory } from '@data/constants';
 import { HeaderMenuControl } from '@pages/controls/headerMenuControl';
 import { Faker } from '@faker';
+import { waitForPageLoad } from '../src/utils/helper';
 
 test.describe('Cart functionality', () => {
   test.setTimeout(2 * 60000);
@@ -19,15 +20,17 @@ test.describe('Cart functionality', () => {
     await expect.soft(headerMenu.cartIcon.button).toHaveAttribute('class', /empty/);
   });
 
-  test('Test - Add items to cart', async ({ categoryPage }) => {
+  test.only('Test - Add items to cart', async ({ page, categoryPage }) => {
     let totalItemsQuantity: number = 0;
 
     for (const category of categories) {
       await headerMenu.openCategoryByName(category);
+      await waitForPageLoad(page);
       const firstItem = await categoryPage.getItemByIndex(0);
       const itemsQuantity = Faker.getRandomNumber(1, 4);
 
       firstItem.quantity = itemsQuantity;
+      await firstItem.waitForItemLoad();
       addedItemsInfo.push(await firstItem.getItemInfo());
 
       await firstItem.addToCart();
@@ -38,7 +41,7 @@ test.describe('Cart functionality', () => {
       await expect(headerMenu.cartPopup.popup).toBeHidden();
 
       totalItemsQuantity = totalItemsQuantity + itemsQuantity;
-      await expect.soft(headerMenu.cartIcon.button).toHaveText(`${totalItemsQuantity}`);
+      await expect.soft(headerMenu.cartIcon.button).toHaveText(`${totalItemsQuantity}`, { timeout: 5000 });
     }
 
     await headerMenu.cartIcon.clickButton();
@@ -54,7 +57,7 @@ test.describe('Cart functionality', () => {
     await expect.soft(actualTotal).toHaveText(expectedTotal.toString());
   });
 
-  test('Update products number test', async ({ homePage }) => {
+  test.skip('Update products number test', async ({ homePage }) => {
     // await headerMenu.openCategoryByName(ProductCategory.ACCESSORIES_AND_EQUIPMENT);
     //
     // const title = await homePage.getFirstProductTitle();

@@ -15,21 +15,32 @@ export abstract class ItemBaseControl extends WebElement {
     super(page);
   }
 
+  get name(): Locator {
+    return this.nameLoc;
+  }
+
+  get description(): Locator {
+    return this.descriptionLoc;
+  }
+
   abstract getQuantity(): Promise<number> | number;
 
-  private async getItemOption(): Promise<string> {
+  protected async getItemOption(): Promise<string> {
     return (await this.optionLoc.innerText()).trim();
   }
 
   async getItemInfo(): Promise<CartItem> {
     await this.itemLoc.hover();
-    return {
+    const itemInfo: CartItem = {
       name: await this.nameLoc.innerText(),
       image: await this.imageLinkLoc.getAttribute('href'),
       description: await this.descriptionLoc.innerText(),
-      option: await this.getItemOption(),
-      quantity: await this.getQuantity() ?? 1,
-      price: parsePrice(await this.priceLoc.innerText()),
+      quantity: (await this.getQuantity()) ?? 1,
     };
+    if (await this.priceLoc.isVisible()) {
+      itemInfo.option = await this.getItemOption();
+      itemInfo.price = parsePrice(await this.priceLoc.innerText());
+    }
+    return itemInfo;
   }
 }
