@@ -1,6 +1,5 @@
 import { BasePage } from '@pages/basePage';
 import { Locator, Page } from '@playwright/test';
-import { getRandomItems } from '../utils/helper';
 
 export class BrandPage extends BasePage {
   private readonly pageTitleLoc: Locator;

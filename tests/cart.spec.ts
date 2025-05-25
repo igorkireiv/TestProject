@@ -91,7 +91,6 @@ test.describe('Cart functionality', () => {
       const item = await categoryPage.getItemByIndex(1);
 
       await item.waitForItemLoad();
-      const itemsInfo = await item.getItemInfo();
 
       await item.addToCart();
       await cartPopup.popup.waitFor({ state: 'visible' });

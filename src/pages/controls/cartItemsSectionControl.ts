@@ -17,12 +17,11 @@ export class CartItemsSectionControl extends WebElement {
     return new CartItemControl(this.page, index);
   }
 
-  async getAllCartItemsInfo(giftsCount?: number): Promise<ItemInfo[]> {
+  async getAllCartItemsInfo(): Promise<ItemInfo[]> {
     const itemsNumber = await this.page.locator('.product__column').count();
 
     const itemsInfo: ItemInfo[] = [];
 
-    // use giftsCount to skip gifts items info
     for (let itemIndex = itemsNumber - 1; itemIndex >= 0; itemIndex--) {
       const item = this.getCartItemByIndex(itemIndex);
       const itemInfo = await item.getItemInfo();

@@ -3,7 +3,6 @@ import { Locator, Page } from '@playwright/test';
 import { ItemControl } from '@pages/controls/itemControl';
 import { getRandomItems, waitForPageLoad } from '../utils/helper';
 import { ItemInfo } from '@types';
-import { tr } from '@faker-js/faker';
 
 export class CategoryPage extends BasePage {
   private readonly filterBlockLoc: Locator;

@@ -3,7 +3,6 @@ import { ItemBaseControl } from '@pages/controls/ItemBaseControl';
 import { ButtonControl } from '@pages/controls/buttonControl';
 import { normalizeText } from '../../utils/helper';
 import { ItemDetailsPage } from '@pages/ItemDetailsPage';
-import { th } from '@faker-js/faker';
 
 export class ItemControl extends ItemBaseControl {
   protected _quantity: number;
