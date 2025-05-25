@@ -3,6 +3,7 @@ import { Locator, Page } from '@playwright/test';
 import { ItemControl } from '@pages/controls/itemControl';
 import { getRandomItems, waitForPageLoad } from '../utils/helper';
 import { ItemInfo } from '@types';
+import { tr } from '@faker-js/faker';
 
 export class CategoryPage extends BasePage {
   private readonly filterBlockLoc: Locator;
@@ -41,10 +42,11 @@ export class CategoryPage extends BasePage {
     return itemsInfo;
   }
 
-  async getRandomFilterItems(filterName: string, count: number): Promise<string[]> {
+  async getRandomFilterItems(filterName: string, count: number, available = true): Promise<string[]> {
     const filterBlock = this.filterBlockLoc.filter({ has: this.page.locator(`[data-option-name="${filterName}"]`) });
 
-    const filterItemsLoc = filterBlock.locator('[data-filter-variant-name]').all();
+    const locFilter = available ? { hasNotText: '(0)' } : { hasText: '(0)' };
+    const filterItemsLoc = filterBlock.locator('[data-filter-variant-name]').filter(locFilter).all();
     const randomFilterItems = getRandomItems(await filterItemsLoc, count);
 
     const filterItems: string[] = [];

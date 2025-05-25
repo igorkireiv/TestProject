@@ -37,10 +37,11 @@ export class HeaderMenuControl extends WebElement {
       await this.cartPopup.popup.waitFor({ state: 'visible' });
 
       const deleteButton = this.page.locator('.product__button-remove');
-      const deleteButtonCount = await this.page.locator('.product__button-remove').count();
+      let deleteButtonCount = await this.page.locator('.product__button-remove').count();
       for (let i = deleteButtonCount - 1; i >= 0; i--) {
         await deleteButton.nth(i).click();
         await this.page.waitForTimeout(100);
+        deleteButtonCount = await this.page.locator('.product__button-remove').count();
       }
     }
   }

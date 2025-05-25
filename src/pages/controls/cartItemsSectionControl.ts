@@ -1,11 +1,10 @@
-import { Locator, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { WebElement } from '@pages/controls/webElement';
 import { ItemInfo } from '@types';
 import { CartItemControl } from '@pages/controls/cart/cartItemControl';
-import { ButtonControl } from '@pages/controls/buttonControl';
+import { parsePrice } from '../../utils/helper';
 
 export class CartItemsSectionControl extends WebElement {
-
   constructor(page: Page) {
     super(page);
   }
@@ -18,11 +17,12 @@ export class CartItemsSectionControl extends WebElement {
     return new CartItemControl(this.page, index);
   }
 
-  async getAllCartItemsInfo(): Promise<ItemInfo[]> {
+  async getAllCartItemsInfo(giftsCount?: number): Promise<ItemInfo[]> {
     const itemsNumber = await this.page.locator('.product__column').count();
 
     const itemsInfo: ItemInfo[] = [];
 
+    // use giftsCount to skip gifts items info
     for (let itemIndex = itemsNumber - 1; itemIndex >= 0; itemIndex--) {
       const item = this.getCartItemByIndex(itemIndex);
       const itemInfo = await item.getItemInfo();
@@ -33,5 +33,11 @@ export class CartItemsSectionControl extends WebElement {
     }
 
     return itemsInfo;
+  }
+
+  async getGiftsCount(): Promise<number> {
+    // count all items with 0 price
+    const itemsPrices = await this.page.locator('.product-list .product__price').allInnerTexts();
+    return itemsPrices.map(price => parsePrice(price)).filter(price => price === 0).length;
   }
 }

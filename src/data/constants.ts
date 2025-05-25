@@ -25,13 +25,13 @@ export enum ProductCategory {
 }
 
 export enum PageTitle {
-  CHECKOUT_PAGE = 'Оформлення замовлення'
+  CHECKOUT_PAGE = 'Оформлення замовлення',
 }
 
 export enum Filter {
   BRAND = 'Бренд',
   PRODUCT_GROUP = 'Група товару',
-  VOLUME = "Об'єм"
+  VOLUME = "Об'єм",
 }
 
 export enum BrandSearchLetter {
@@ -95,4 +95,3 @@ export enum BrandSearchLetter {
   UKR_SH = 'Ш',
   UKR_YA = 'Я',
 }
-

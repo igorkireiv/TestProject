@@ -26,6 +26,10 @@ export class ItemDetailsPage extends BasePage {
     await this.buyBtnControl.clickButton();
   }
 
+  getItemSubCategory(): Locator {
+    return this.page.locator('.product-item-tabs__content strong').filter({ hasText: 'Група товару: ' });
+  }
+
   async getPageTitle(): Promise<string> {
     const breadcrumbLocator = this.page.locator('ol[itemtype] li span[itemprop="name"]');
     const breadcrumbItems = await breadcrumbLocator.allInnerTexts();

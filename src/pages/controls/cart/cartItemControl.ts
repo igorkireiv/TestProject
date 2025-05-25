@@ -1,6 +1,7 @@
 import { Locator, Page } from '@playwright/test';
 import { ButtonControl } from '@pages/controls/buttonControl';
 import { ItemBaseControl } from '@pages/controls/ItemBaseControl';
+import { parsePrice } from '../../../utils/helper';
 
 export class CartItemControl extends ItemBaseControl {
   private readonly quantityLoc: Locator;
@@ -22,6 +23,10 @@ export class CartItemControl extends ItemBaseControl {
     this.deleteBtnControl = new ButtonControl(this.page, this.itemLoc.locator('.product__button-remove'));
   }
 
+  async getPrice(): Promise<number> {
+    return parsePrice(await this.priceLoc.innerText());
+  }
+
   async getQuantity(): Promise<number> {
     return Number.parseInt(await this.quantityLoc.inputValue());
   }
@@ -36,6 +41,14 @@ export class CartItemControl extends ItemBaseControl {
   async increaseAmount(amount: number) {
     for (let clickIndex = 1; clickIndex < amount; clickIndex++) {
       await this.plusBtnControl.clickButton();
+      await this.page.waitForTimeout(1000);
+    }
+  }
+
+  async decreaseAmount(amount: number) {
+    for (let clickIndex = 1; clickIndex <= amount; clickIndex++) {
+      await this.minusBtnControl.clickButton();
+      await this.page.waitForTimeout(1000);
     }
   }
 }

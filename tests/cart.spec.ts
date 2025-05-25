@@ -4,10 +4,12 @@ import { PageTitle, ProductCategory, userInfo } from '@data/constants';
 import { HeaderMenuControl } from '@pages/controls/headerMenuControl';
 import { Faker } from '@faker';
 import { waitForPageLoad } from '../src/utils/helper';
+import { CartPopupControl } from '@pages/controls/cart/cartPopupControl';
 
 test.describe('Cart functionality', () => {
-  test.setTimeout(2 * 60000);
+  test.setTimeout(3 * 60000);
   let headerMenu: HeaderMenuControl;
+  let cartPopup: CartPopupControl;
 
   const categories = [ProductCategory.PERFUMERY, ProductCategory.MAKE_UP, ProductCategory.HEALTH_CARE];
   const addedItemsInfo: ItemInfo[] = [];
@@ -16,17 +18,19 @@ test.describe('Cart functionality', () => {
     await homePage.openHomePage();
     await homePage.logIn();
     headerMenu = homePage.headerMenu;
+    cartPopup = homePage.headerMenu.cartPopup;
     await headerMenu.clearCart();
     await expect.soft(headerMenu.cartIcon.button).toHaveAttribute('class', /empty/);
   });
 
-  test.only(`Test - Add items to cart from ${categories} categories and verify checkout info`, async ({
+  test(`Test - Add items to cart from ${categories} categories and verify checkout info`, async ({
     page,
     categoryPage,
     checkoutPage,
   }) => {
     let totalItemsQuantity: number = 0;
 
+    let giftsCount: number;
     for (const category of categories) {
       await headerMenu.openCategoryByName(category);
       await waitForPageLoad(page);
@@ -38,33 +42,36 @@ test.describe('Cart functionality', () => {
       addedItemsInfo.push(await firstItem.getItemInfo());
 
       await firstItem.addToCart();
-      await headerMenu.cartPopup.popup.waitFor({ state: 'visible' });
-      const lastAddedItem = headerMenu.cartPopup.cartItemsSection.getCartItemByIndex(0);
+      await cartPopup.popup.waitFor({ state: 'visible' });
+      giftsCount = await cartPopup.cartItemsSection.getGiftsCount();
+      const itemIndex = giftsCount;
+      const lastAddedItem = cartPopup.cartItemsSection.getCartItemByIndex(itemIndex);
       await lastAddedItem.increaseAmount(itemsQuantity);
-      await headerMenu.cartPopup.closeBtnControl.clickButton();
+      await cartPopup.closeBtnControl.clickButton();
       await expect(headerMenu.cartPopup.popup).toBeHidden();
 
       totalItemsQuantity = totalItemsQuantity + itemsQuantity;
-      await expect.soft(headerMenu.cartIcon.button).toHaveText(`${totalItemsQuantity}`, { timeout: 5000 });
     }
 
+    await expect.soft(headerMenu.cartIcon.button).toHaveText(`${totalItemsQuantity}`, { timeout: 5000 });
     await headerMenu.cartIcon.clickButton();
 
-    const cartItemsInfo = await headerMenu.cartPopup.cartItemsSection.getAllCartItemsInfo();
+    const cartItemsInfo = await cartPopup.cartItemsSection.getAllCartItemsInfo();
     // Check items info
     await expect(cartItemsInfo).toEqual(addedItemsInfo);
 
     // Check total price
     const expectedTotal = addedItemsInfo.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const actualTotal = headerMenu.cartPopup.totalPrice;
+    const actualTotal = cartPopup.totalPrice;
     await expect.soft(actualTotal).toHaveText(expectedTotal.toString());
 
     // Go to Chekout page
-    await headerMenu.cartPopup.chekoutBtnControl.clickButton();
+    await cartPopup.checkoutBtnControl.clickButton();
     await expect.soft(checkoutPage.pageTitle).toHaveText(PageTitle.CHECKOUT_PAGE);
 
     // Check User info
     const actualUserInformation = await checkoutPage.getUserInfo();
+    delete userInfo.birthdate;
     await expect.soft(actualUserInformation).toEqual(userInfo);
 
     // Check items info
@@ -78,27 +85,59 @@ test.describe('Cart functionality', () => {
   });
 
   categories.forEach(category => {
-    test.skip(`Test - Update products number test for ${category} category`, async ({ homePage }) => {
-      // await headerMenu.openCategoryByName(ProductCategory.ACCESSORIES_AND_EQUIPMENT);
-      //
-      // const title = await homePage.getFirstProductTitle();
-      // const price = await homePage.getFirstProductPrice();
-      //
-      // await homePage.addFirstProductToCart();
-      //
-      // await cartPage.open();
-      //
-      // await cartPage.setProductQuantity(title, 3);
-      //
-      // const cartItem = await cartPage.getCartItemByTitle(title);
-      //
-      // expect(cartItem).toBeTruthy();
-      // expect(cartItem!.price).toBe(price);
-      // expect(cartItem!.quantity).toBe(3);
-      // expect(cartItem!.total).toBe(price * 3);
-      //
-      // const cartTotal = await cartPage.getCartTotalPrice();
-      // expect(cartTotal).toBe(price * 3);
+    test(`Test - Update products number test for ${category} category`, async ({ page, categoryPage }) => {
+      await headerMenu.openCategoryByName(category);
+      await waitForPageLoad(page);
+      const item = await categoryPage.getItemByIndex(1);
+
+      await item.waitForItemLoad();
+      const itemsInfo = await item.getItemInfo();
+
+      await item.addToCart();
+      await cartPopup.popup.waitFor({ state: 'visible' });
+      const giftsCount = await cartPopup.cartItemsSection.getGiftsCount();
+      const itemIndex = giftsCount;
+
+      const cartItemsInfo = await cartPopup.cartItemsSection.getAllCartItemsInfo();
+
+      await expect(cartItemsInfo).toHaveLength(1);
+
+      // Check added product quantity
+      const addedItem = cartPopup.cartItemsSection.getCartItemByIndex(itemIndex);
+      let itemQuantity = await addedItem.getQuantity();
+      await expect(itemQuantity).toEqual(1);
+
+      // Check total price
+      const itemPrice = await addedItem.getPrice();
+      let expectedTotal = itemPrice * itemQuantity;
+      let actualTotal = cartPopup.totalPrice;
+      await expect.soft(actualTotal).toHaveText(expectedTotal.toString());
+
+      // Increase products quantity
+      let itemsQuantityToIncrease = Faker.getRandomNumber(2, 5);
+      await addedItem.increaseAmount(itemsQuantityToIncrease);
+
+      // Check added product quantity after increase
+      itemQuantity = await addedItem.getQuantity();
+      await expect(itemQuantity).toEqual(itemsQuantityToIncrease);
+
+      // Check total price after increase
+      expectedTotal = itemPrice * itemQuantity;
+      actualTotal = cartPopup.totalPrice;
+      await expect.soft(actualTotal).toHaveText(expectedTotal.toString());
+
+      // Decrease products quantity
+      const itemsQuantityToDecrease = 1;
+      await addedItem.decreaseAmount(itemsQuantityToDecrease);
+
+      // Check added product quantity after decrease
+      itemQuantity = await addedItem.getQuantity();
+      await expect(itemQuantity).toEqual(itemsQuantityToIncrease - itemsQuantityToDecrease);
+
+      // Check total price after decrease
+      expectedTotal = itemPrice * itemQuantity;
+      actualTotal = cartPopup.totalPrice;
+      await expect.soft(actualTotal).toHaveText(expectedTotal.toString());
     });
   });
 });

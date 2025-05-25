@@ -1,10 +1,8 @@
 import { BasePage } from '@pages/basePage';
 import { Locator, Page } from '@playwright/test';
-import { getRandomItems, parsePrice } from '../utils/helper';
+import { parsePrice } from '../utils/helper';
 import { UserInfo } from '@types';
-import { th } from '@faker-js/faker';
-import {CartItemsSectionControl} from "@pages/controls/cartItemsSectionControl";
-import {ButtonControl} from "@pages/controls/buttonControl";
+import { CartItemsSectionControl } from '@pages/controls/cartItemsSectionControl';
 
 export class CheckoutPage extends BasePage {
   private readonly pageTitleLoc: Locator;

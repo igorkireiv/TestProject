@@ -1,23 +1,21 @@
 import { Locator, Page } from '@playwright/test';
 import { WebElement } from '@pages/controls/webElement';
-import { ItemInfo } from '@types';
-import { CartItemControl } from '@pages/controls/cart/cartItemControl';
 import { ButtonControl } from '@pages/controls/buttonControl';
-import {CartItemsSectionControl} from "@pages/controls/cartItemsSectionControl";
+import { CartItemsSectionControl } from '@pages/controls/cartItemsSectionControl';
 
 export class CartPopupControl extends WebElement {
   private readonly popupLoc: Locator;
   private readonly totalPriceLoc: Locator;
   cartItemsSection: CartItemsSectionControl;
   closeBtnControl: ButtonControl;
-  chekoutBtnControl: ButtonControl;
+  checkoutBtnControl: ButtonControl;
 
   constructor(page: Page) {
     super(page);
     this.popupLoc = this.page.locator('.cart');
     this.totalPriceLoc = this.page.locator('.total strong');
     this.closeBtnControl = new ButtonControl(this.page, this.popupLoc.locator('.close-icon'));
-    this.chekoutBtnControl = new ButtonControl(this.page, this.popupLoc.locator('[data-location="/ua/checkout/"]'));
+    this.checkoutBtnControl = new ButtonControl(this.page, this.popupLoc.locator('[data-location="/ua/checkout/"]'));
     this.cartItemsSection = new CartItemsSectionControl(this.page);
   }
 

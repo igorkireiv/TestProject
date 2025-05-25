@@ -39,7 +39,7 @@ const test = base.extend<Pages>({
   checkoutPage: async ({ page }, use) => {
     const checkoutPage = new CheckoutPage(page);
     await use(checkoutPage);
-  }
+  },
 });
 
 export { expect, test };
