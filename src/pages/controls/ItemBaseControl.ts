@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 import { WebElement } from '@pages/controls/webElement';
-import { CartItem } from '@types';
+import { ItemInfo } from '@types';
 import { parsePrice } from '../../utils/helper';
 
 export abstract class ItemBaseControl extends WebElement {
@@ -29,9 +29,9 @@ export abstract class ItemBaseControl extends WebElement {
     return (await this.optionLoc.innerText()).trim();
   }
 
-  async getItemInfo(): Promise<CartItem> {
+  async getItemInfo(): Promise<ItemInfo> {
     await this.itemLoc.hover();
-    const itemInfo: CartItem = {
+    const itemInfo: ItemInfo = {
       name: await this.nameLoc.innerText(),
       image: await this.imageLinkLoc.getAttribute('href'),
       description: await this.descriptionLoc.innerText(),

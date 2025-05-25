@@ -2,11 +2,11 @@ export type UserInfo = {
   username: string;
   surname: string;
   email: string;
-  birthdate: string;
+  birthdate?: string;
   phoneNumber: string;
 };
 
-export type CartItem = {
+export type ItemInfo = {
   name?: string;
   image?: string;
   description?: string;

@@ -2,6 +2,8 @@ import { Page } from '@playwright/test';
 import { ItemBaseControl } from '@pages/controls/ItemBaseControl';
 import { ButtonControl } from '@pages/controls/buttonControl';
 import { normalizeText } from '../../utils/helper';
+import { ItemDetailsPage } from '@pages/ItemDetailsPage';
+import { th } from '@faker-js/faker';
 
 export class ItemControl extends ItemBaseControl {
   protected _quantity: number;
@@ -30,8 +32,14 @@ export class ItemControl extends ItemBaseControl {
     return normalizeText(await this.optionLoc.getAttribute('title'));
   }
 
+  async open(): Promise<ItemDetailsPage> {
+    await this.itemLoc.click();
+    return new ItemDetailsPage(this.page);
+  }
+
   async addToCart(): Promise<void> {
     await this.itemLoc.hover();
+    await this.buyBtnControl.button.waitFor({ state: 'visible' });
     await this.buyBtnControl.clickButton();
   }
 

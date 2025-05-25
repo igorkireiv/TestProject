@@ -2,14 +2,20 @@ import { BasePage } from '@pages/basePage';
 import { Locator, Page } from '@playwright/test';
 import { ItemControl } from '@pages/controls/itemControl';
 import { getRandomItems, waitForPageLoad } from '../utils/helper';
-import { CartItem } from '@types';
+import { ItemInfo } from '@types';
 
 export class CategoryPage extends BasePage {
   private readonly filterBlockLoc: Locator;
+  private readonly pageTitleLoc: Locator;
 
   constructor(page: Page) {
     super(page);
     this.filterBlockLoc = this.page.locator('.catalog-filter-block');
+    this.pageTitleLoc = this.page.locator('h1.page-header');
+  }
+
+  get pageTitle(): Locator {
+    return this.pageTitleLoc;
   }
 
   async getItemByIndex(index: number): Promise<ItemControl> {
@@ -20,10 +26,10 @@ export class CategoryPage extends BasePage {
     return await this.page.locator('.catalog-products .simple-slider-list__link').count();
   }
 
-  async getAllItemsInfo(): Promise<CartItem[]> {
+  async getAllItemsInfo(): Promise<ItemInfo[]> {
     const itemsNumber = await this.getItemsNumber();
 
-    const itemsInfo: CartItem[] = [];
+    const itemsInfo: ItemInfo[] = [];
 
     for (let itemIndex = itemsNumber - 1; itemIndex >= 0; itemIndex--) {
       const item = await this.getItemByIndex(itemIndex);
