@@ -21,7 +21,7 @@ export function normalizeText(text: string): string {
 }
 
 export async function waitForPageLoad(page: Page, timeout = 10000) {
-  await page.locator('.catalog-bottom-row + .loading-block').waitFor({ state: 'hidden', timeout: timeout });
   await page.waitForLoadState('domcontentloaded', { timeout });
   await page.waitForLoadState('load', { timeout });
+  await page.locator('.catalog-bottom-row + .loading-block').waitFor({ state: 'hidden', timeout: timeout });
 }

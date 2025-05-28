@@ -27,6 +27,11 @@ export class ItemControl extends ItemBaseControl {
     return this._quantity;
   }
 
+  async getName(): Promise<string> {
+    await this.nameLoc.scrollIntoViewIfNeeded();
+    return this.nameLoc.innerText();
+  }
+
   protected async getItemOption(): Promise<string> {
     return normalizeText(await this.optionLoc.getAttribute('title'));
   }

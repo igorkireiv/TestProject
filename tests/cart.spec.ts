@@ -5,6 +5,7 @@ import { HeaderMenuControl } from '@pages/controls/headerMenuControl';
 import { Faker } from '@faker';
 import { waitForPageLoad } from '../src/utils/helper';
 import { CartPopupControl } from '@pages/controls/cart/cartPopupControl';
+import { CartItemsSectionControl } from '@pages/controls/cartItemsSectionControl';
 
 test.describe('Cart functionality', () => {
   test.setTimeout(3 * 60000);
@@ -43,7 +44,7 @@ test.describe('Cart functionality', () => {
 
       await firstItem.addToCart();
       await cartPopup.popup.waitFor({ state: 'visible' });
-      giftsCount = await cartPopup.cartItemsSection.getGiftsCount();
+      giftsCount = await CartItemsSectionControl.getGiftsCount(page);
       const itemIndex = giftsCount;
       const lastAddedItem = cartPopup.cartItemsSection.getCartItemByIndex(itemIndex);
       await lastAddedItem.increaseAmount(itemsQuantity);
@@ -94,15 +95,14 @@ test.describe('Cart functionality', () => {
 
       await item.addToCart();
       await cartPopup.popup.waitFor({ state: 'visible' });
-      const giftsCount = await cartPopup.cartItemsSection.getGiftsCount();
-      const itemIndex = giftsCount;
+      let giftsCount = await CartItemsSectionControl.getGiftsCount(page);
 
       const cartItemsInfo = await cartPopup.cartItemsSection.getAllCartItemsInfo();
 
       await expect(cartItemsInfo).toHaveLength(1);
 
       // Check added product quantity
-      const addedItem = cartPopup.cartItemsSection.getCartItemByIndex(itemIndex);
+      let addedItem = cartPopup.cartItemsSection.getCartItemByIndex(giftsCount);
       let itemQuantity = await addedItem.getQuantity();
       await expect(itemQuantity).toEqual(1);
 
@@ -117,6 +117,8 @@ test.describe('Cart functionality', () => {
       await addedItem.increaseAmount(itemsQuantityToIncrease);
 
       // Check added product quantity after increase
+      giftsCount = await CartItemsSectionControl.getGiftsCount(page);
+      addedItem = cartPopup.cartItemsSection.getCartItemByIndex(giftsCount);
       itemQuantity = await addedItem.getQuantity();
       await expect(itemQuantity).toEqual(itemsQuantityToIncrease);
 
@@ -130,13 +132,15 @@ test.describe('Cart functionality', () => {
       await addedItem.decreaseAmount(itemsQuantityToDecrease);
 
       // Check added product quantity after decrease
+      giftsCount = await CartItemsSectionControl.getGiftsCount(page);
+      addedItem = cartPopup.cartItemsSection.getCartItemByIndex(giftsCount);
       itemQuantity = await addedItem.getQuantity();
       await expect(itemQuantity).toEqual(itemsQuantityToIncrease - itemsQuantityToDecrease);
 
       // Check total price after decrease
       expectedTotal = itemPrice * itemQuantity;
       actualTotal = cartPopup.totalPrice;
-      await expect.soft(actualTotal).toHaveText(expectedTotal.toString());
+      await expect(actualTotal).toHaveText(expectedTotal.toString());
     });
   });
 });

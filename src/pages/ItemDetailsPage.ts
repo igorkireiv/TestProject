@@ -26,8 +26,10 @@ export class ItemDetailsPage extends BasePage {
     await this.buyBtnControl.clickButton();
   }
 
-  getItemSubCategory(): Locator {
-    return this.page.locator('.product-item-tabs__content strong').filter({ hasText: 'Група товару: ' });
+  async getItemSubCategory(): Promise<string> {
+    return (await this.page.locator('li:has(strong:has-text("Група товару: "))').innerText())
+      .split('\n')
+      .filter(filter => filter.includes('Група товару:'))[0];
   }
 
   async getPageTitle(): Promise<string> {

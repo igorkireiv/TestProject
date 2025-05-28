@@ -13,7 +13,7 @@ test.describe('Filters functionality', () => {
     headerMenu = homePage.headerMenu;
   });
 
-  test.skip('Test - Filter by Brand', async ({ page, categoryPage }) => {
+  test('Test - Filter by Brand', async ({ page, categoryPage }) => {
     const productCategory = ProductCategory.PERFUMERY;
     await headerMenu.openCategoryByName(productCategory);
 
@@ -30,7 +30,7 @@ test.describe('Filters functionality', () => {
 
       for (let itemIndex = 0; itemIndex < itemsNumber; itemIndex++) {
         const item = await categoryPage.getItemByIndex(itemIndex);
-        expect.soft(item.name).toContainText(brandName, { ignoreCase: true });
+        expect.soft(await item.getName()).toContain(brandName);
       }
     }
   });
@@ -52,9 +52,11 @@ test.describe('Filters functionality', () => {
       const firstItem = await categoryPage.getItemByIndex(0);
       const itemName = (await firstItem.getItemInfo()).name;
       const itemDetailsPage = await firstItem.open();
+      await waitForPageLoad(page);
+
       expect.soft(await itemDetailsPage.getPageTitle()).toContain(productCategory);
       expect.soft(await itemDetailsPage.getPageTitle()).toContain(itemName);
-      expect.soft(itemDetailsPage.getItemSubCategory()).toContainText(groupName);
+      expect.soft(await itemDetailsPage.getItemSubCategory()).toContain(groupName.toLowerCase());
     }
   });
 });

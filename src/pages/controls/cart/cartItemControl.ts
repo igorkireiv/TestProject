@@ -2,11 +2,10 @@ import { Locator, Page } from '@playwright/test';
 import { ButtonControl } from '@pages/controls/buttonControl';
 import { ItemBaseControl } from '@pages/controls/ItemBaseControl';
 import { parsePrice } from '../../../utils/helper';
+import { CartItemsSectionControl } from '@pages/controls/cartItemsSectionControl';
 
 export class CartItemControl extends ItemBaseControl {
   private readonly quantityLoc: Locator;
-  private readonly plusBtnControl: ButtonControl;
-  private readonly minusBtnControl: ButtonControl;
   private readonly deleteBtnControl: ButtonControl;
 
   constructor(page: Page, nameOrId: string | number) {
@@ -18,8 +17,6 @@ export class CartItemControl extends ItemBaseControl {
     this.optionLoc = this.itemLoc.locator('.product__header-option');
     this.quantityLoc = this.itemLoc.locator('[name="count[]"]');
     this.priceLoc = this.itemLoc.locator('.product__price');
-    this.minusBtnControl = new ButtonControl(this.page, this.itemLoc.locator('.product__button-decrease'));
-    this.plusBtnControl = new ButtonControl(this.page, this.itemLoc.locator('.product__button-increase'));
     this.deleteBtnControl = new ButtonControl(this.page, this.itemLoc.locator('.product__button-remove'));
   }
 
@@ -40,15 +37,19 @@ export class CartItemControl extends ItemBaseControl {
 
   async increaseAmount(amount: number) {
     for (let clickIndex = 1; clickIndex < amount; clickIndex++) {
-      await this.plusBtnControl.clickButton();
-      await this.page.waitForTimeout(1000);
+      const giftsCount = await CartItemsSectionControl.getGiftsCount(this.page);
+      const plusBtnControl = this.getItemLocator(giftsCount).locator('.product__button-increase');
+      await plusBtnControl.click();
+      await this.page.waitForTimeout(2000);
     }
   }
 
   async decreaseAmount(amount: number) {
     for (let clickIndex = 1; clickIndex <= amount; clickIndex++) {
-      await this.minusBtnControl.clickButton();
-      await this.page.waitForTimeout(1000);
+      const giftsCount = await CartItemsSectionControl.getGiftsCount(this.page);
+      const minusBtnControl = this.getItemLocator(giftsCount).locator('.product__button-decrease');
+      await minusBtnControl.click();
+      await this.page.waitForTimeout(2000);
     }
   }
 }

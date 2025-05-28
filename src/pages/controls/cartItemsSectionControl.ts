@@ -9,6 +9,12 @@ export class CartItemsSectionControl extends WebElement {
     super(page);
   }
 
+  static async getGiftsCount(page: Page): Promise<number> {
+    // count all items with 0 price
+    const itemsPrices = await page.locator('.product-list .product__price').allInnerTexts();
+    return itemsPrices.map(price => parsePrice(price)).filter(price => price === 0).length;
+  }
+
   getCartItemByName(name: string): CartItemControl {
     return new CartItemControl(this.page, name);
   }
@@ -32,11 +38,5 @@ export class CartItemsSectionControl extends WebElement {
     }
 
     return itemsInfo;
-  }
-
-  async getGiftsCount(): Promise<number> {
-    // count all items with 0 price
-    const itemsPrices = await this.page.locator('.product-list .product__price').allInnerTexts();
-    return itemsPrices.map(price => parsePrice(price)).filter(price => price === 0).length;
   }
 }
